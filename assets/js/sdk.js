@@ -43,6 +43,18 @@ jQuery(document).ready(function($) {
                 progress.style.backgroundPosition = pc + '% 0';
             }, false);
 
+            // File received/failed
+            s3.onreadystatechange = function(e) {
+                if (s3.readyState == 4) {
+                    progress.className = (s3.status == 200 ? "success" : "failure");
+                }
+            };
+
+            // Send the file
+            s3.open("POST", $id("upload").action, true);
+            s3.setRequestHeader("X-FILENAME", file.name);
+            s3.send(file);
+
             // Success
             alert('Successfully uploaded file.');
         });
