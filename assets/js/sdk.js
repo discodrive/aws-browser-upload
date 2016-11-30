@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 
     // REFACTOR SETUP TO USE ENV VARIABLES HERE
+    // CREATE AN OPTIONS PAGE. IF OPTIONS SET USE THEM, OTHERWISE REVERT TO CONSTANTS IN WP-CONFIG
 
     var bucketName = 'royal-court-podcasts';
     var bucketRegion = 'eu-west-1';
@@ -116,7 +117,8 @@ jQuery(document).ready(function($) {
             alert('Successfully delete file.');
         });
     }
- 
+    
+    // Prevent default form submission and run the add file function
     jQuery('#fileupload').on('submit', function(e) {
         e.preventDefault();
         addFile();
