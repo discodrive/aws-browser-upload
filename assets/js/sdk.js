@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
      * @return null
      */
     function addFile() {
-        var files = document.getElementById('filesupload-files').files;
+        var files = document.getElementById('fileupload-files').files;
         if (!files.length) {
             return alert('Please choose a file to upload.');
         }
