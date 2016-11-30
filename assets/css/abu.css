@@ -1,0 +1,16 @@
+#progress p {
+    display:block;
+    width:240px;
+    padding:2px 5px;
+    margin:2px 0;
+    border:1px solid #446;
+    border-radius:5px;
+}
+
+#progress p.success {
+    background:#0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed {
+    background:#c00 none 0 0 no-repeat;
+}

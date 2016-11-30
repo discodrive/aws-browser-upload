@@ -7,5 +7,7 @@
         <br/>
         <input type="submit" value="Upload File to S3">
     </form>
+
+    <div id="progress"></div>
 </div>
 

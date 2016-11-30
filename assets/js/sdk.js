@@ -28,8 +28,22 @@ jQuery(document).ready(function($) {
             ACL: 'public-read'
         }, function(err,data) {
             if(err) {
+                // Failure message
                 return alert('There was an error uploading your file', err.message);
             }
+
+            // Create a progress bar
+            var o = $id('progress');
+            var progress = o.appendChild(document.createElement('p'));
+            progress.appendChild(document.createTextNode('upload ' + file.name));
+
+            // Calculate progress
+            s3.upload.addEventListener('progress', function(e){
+                var pc = parseInt(100 - (e.loaded / e.total * 100));
+                progress.style.backgroundPosition = pc + '% 0';
+            }, false);
+
+            // Success
             alert('Successfully uploaded file.');
         });
     }
