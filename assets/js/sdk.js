@@ -103,6 +103,20 @@ jQuery(document).ready(function($) {
         });
     }
 
+    /**
+     * Delete a file from the S3 bucket
+     * @author Lee Aplin <lee@substrakt.com>
+     * @return null
+     */
+    function deleteFile(fileName) {
+        s3.deleteObject({Key: fileName}, function(err, data) {
+            if (err) {
+                return alert('There was an error deleting your file:' + err.message);
+            }
+            alert('Successfully delete file.');
+        });
+    }
+ 
     jQuery('#fileupload').on('submit', function(e) {
         e.preventDefault();
         addFile();
