@@ -22,11 +22,11 @@ jQuery(document).ready(function($) {
      * @return null
      */
     function addFile() {
-        var filess = document.getElementById('filesupload-files').files;
-        if (!filess.length) {
+        var files = document.getElementById('filesupload-files').files;
+        if (!files.length) {
             return alert('Please choose a file to upload.');
         }
-        var file = filess[0];
+        var file = files[0];
         var fileName = file.name;
 
         s3.upload({
@@ -67,8 +67,40 @@ jQuery(document).ready(function($) {
         });
     }
 
+    /**
+     * Return a list of all files in the S3 bucket
+     * @author Lee Aplin <lee@substrakt.com>
+     * @return null
+     */
     function listFiles() {
-
+        s3.listObjects({Delimiter: '/'}, function(err, data) {
+            if (err) {
+                return alert('There was an error listing your files:' + err.message);
+            } else {
+                var fileList = data.CommonPrefixes.map(function(commonPrefix) {
+                    var prefix = commonPrefix.Prefix;
+                    var fileName = decodeURIComponent(prefix.replace('/', ''));
+                    return getHtml([
+                        '<li>',
+                            '<span onclick="deleteFile(\'' + fileName + '\')">X</span>',
+                        '</li>' 
+                    ]);
+                    var message = fileList.length ?
+                        getHtml([
+                            '<p>Click on the X to delete the file.</p>'
+                        ]) : 
+                        '<p>You do not have any files.</p>';
+                    var htmlTemplate = [
+                        '<h2>Uploaded Files</h2>',
+                        message,
+                        '<ul>',
+                            getHtml(fileList),
+                        '</ul>'
+                    ]
+                    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
+                });
+            }
+        });
     }
 
     jQuery('#fileupload').on('submit', function(e) {
