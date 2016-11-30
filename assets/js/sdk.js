@@ -1,5 +1,7 @@
 jQuery(document).ready(function($) {
 
+    // REFACTOR SETUP TO USE ENV VARIABLES HERE
+
     var bucketName = 'royal-court-podcasts';
     var bucketRegion = 'eu-west-1';
 
@@ -14,12 +16,17 @@ jQuery(document).ready(function($) {
       params: {Bucket: bucketName}
     });
 
-    function addPodcast() {
-        var podcasts = document.getElementById('podcastupload-files').files;
-        if (!podcasts.length) {
+    /**
+     * Upload a file to S3
+     * @author Lee Aplin <lee@substrakt.com>
+     * @return null
+     */
+    function addFile() {
+        var filess = document.getElementById('filesupload-files').files;
+        if (!filess.length) {
             return alert('Please choose a file to upload.');
         }
-        var file = podcasts[0];
+        var file = filess[0];
         var fileName = file.name;
 
         s3.upload({
@@ -60,9 +67,13 @@ jQuery(document).ready(function($) {
         });
     }
 
-    jQuery('#podcastupload').on('submit', function(e) {
+    function listFiles() {
+
+    }
+
+    jQuery('#fileupload').on('submit', function(e) {
         e.preventDefault();
-        addPodcast();
+        addFile();
     });
 
 });

@@ -5,6 +5,7 @@
     margin:2px 0;
     border:1px solid #446;
     border-radius:5px;
+    background: #eee url("images/progress.png") 100% 0 repeat-y;
 }
 
 #progress p.success {
