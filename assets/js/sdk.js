@@ -17,6 +17,25 @@ jQuery(document).ready(function($) {
       params: {Bucket: bucketName}
     });
 
+    // // Create a progress bar
+    // var o = document.getElementById('progress');
+    // var progress = o.appendChild(document.createElement('p'));
+    // progress.appendChild(document.createTextNode('upload ' + file.name));
+
+    // // Calculate progress
+    // s3.upload.addEventListener('progress', function(e){
+    //     var pc = parseInt(100 - (e.loaded / e.total * 100));
+    //     progress.style.backgroundPosition = pc + '% 0';
+    // }, false);
+
+    // // File received/failed
+    // s3.onreadystatechange = function(e) {
+    //     if (s3.readyState == 4) {
+    //         progress.className = (s3.status == 200 ? "success" : "failure");
+    //     }
+    // };
+
+
     /**
      * Upload a file to S3
      * @author Lee Aplin <lee@substrakt.com>
@@ -29,42 +48,23 @@ jQuery(document).ready(function($) {
         }
         var file = files[0];
         var fileName = file.name;
-
+        
         s3.upload({
             Key: fileName,
             Body: file,
             ACL: 'public-read'
         }, function(err,data) {
-            if(err) {
-                // Failure message
-                return alert('There was an error uploading your file', err.message);
-            }
-
-            // Create a progress bar
-            var o = $id('progress');
-            var progress = o.appendChild(document.createElement('p'));
-            progress.appendChild(document.createTextNode('upload ' + file.name));
-
-            // Calculate progress
-            s3.upload.addEventListener('progress', function(e){
-                var pc = parseInt(100 - (e.loaded / e.total * 100));
-                progress.style.backgroundPosition = pc + '% 0';
-            }, false);
-
-            // File received/failed
-            s3.onreadystatechange = function(e) {
-                if (s3.readyState == 4) {
-                    progress.className = (s3.status == 200 ? "success" : "failure");
+            if (s3.upload && file.size <= document.getElementById("MAX_FILE_SIZE").value) {
+                if(err) {
+                    // Failure message
+                    return alert('There was an error uploading your file', err.message);
                 }
-            };
 
-            // Send the file
-            s3.open("POST", $id("upload").action, true);
-            s3.setRequestHeader("X-FILENAME", file.name);
-            s3.send(file);
-
-            // Success
-            alert('Successfully uploaded file.');
+                // Success
+                alert('Successfully uploaded file.');
+            } else {
+                alert('The filesize is too large, please upload a smaller file.');
+            }
         });
     }
 
