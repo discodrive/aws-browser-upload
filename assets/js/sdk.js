@@ -68,38 +68,43 @@ jQuery(document).ready(function($) {
         });
     }
 
+    function getHtml(template) {
+        return template.join('\n');
+    }
+
     /**
      * Return a list of all files in the S3 bucket
      * @author Lee Aplin <lee@substrakt.com>
      * @return null
      */
-    function listFiles() {
-        s3.listObjects({Delimiter: '/'}, function(err, data) {
+    window.listFiles = function listFiles() {
+        s3.listObjectsV2({Delimiter: '/'}, function(err, data) {
             if (err) {
                 return alert('There was an error listing your files:' + err.message);
             } else {
-                var fileList = data.CommonPrefixes.map(function(commonPrefix) {
-                    var prefix = commonPrefix.Prefix;
-                    var fileName = decodeURIComponent(prefix.replace('/', ''));
+                //document.getElementById('app').innerHTML = data.Contents[0].Key;
+                
+                var fileList = data.Contents.map(function(obj) {
+                    var fileName = obj.Key;
                     return getHtml([
                         '<li>',
-                            '<span onclick="deleteFile(\'' + fileName + '\')">X</span>',
+                            fileName + ' <span onclick="deleteFile(\'' + fileName + '\')">X</span>',
                         '</li>' 
                     ]);
-                    var message = fileList.length ?
-                        getHtml([
-                            '<p>Click on the X to delete the file.</p>'
-                        ]) : 
-                        '<p>You do not have any files.</p>';
-                    var htmlTemplate = [
-                        '<h2>Uploaded Files</h2>',
-                        message,
-                        '<ul>',
-                            getHtml(fileList),
-                        '</ul>'
-                    ]
-                    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
                 });
+                var message = fileList.length ?
+                    getHtml([
+                        '<p>Click on the X to delete the file.</p>'
+                    ]) : 
+                    '<p>You do not have any files.</p>';
+                var htmlTemplate = [
+                    '<h2>Uploaded Files</h2>',
+                    message,
+                    '<ul>',
+                        getHtml(fileList),
+                    '</ul>'
+                ]
+                document.getElementById('app').innerHTML = getHtml(htmlTemplate);
             }
         });
     }
@@ -109,7 +114,7 @@ jQuery(document).ready(function($) {
      * @author Lee Aplin <lee@substrakt.com>
      * @return null
      */
-    function deleteFile(fileName) {
+    window.deleteFile = function deleteFile(fileName) {
         s3.deleteObject({Key: fileName}, function(err, data) {
             if (err) {
                 return alert('There was an error deleting your file:' + err.message);
