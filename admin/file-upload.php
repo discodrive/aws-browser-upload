@@ -1,13 +1,19 @@
 <div class="wrap">
     <h2>Upload a file to AWS S3</h2>
-    <br/>
     <form id="fileupload" action="#" method="post" enctype="multipart/form-data">
-        File to upload to S3:
-
-        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="30000000" />
-        <input type="file" name="file" id="fileupload-files">
-        <br/>
-        <input type="submit" value="Upload File to S3">
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th scope="row"><label for="file">Choose a file to upload:</label></th>
+                    <td>
+                        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="30000000" />
+                        <input type="file" name="file" id="fileupload-files">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p class="submit"><input type="submit" value="Upload File to S3" class="button button-primary"></p>
     </form>
 
     <div id="progress"></div>

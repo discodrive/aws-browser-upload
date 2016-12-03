@@ -18,6 +18,7 @@ jQuery(document).ready(function($) {
     });
 
     // // Create a progress bar
+    // var file = document.getElementById('fileupload-files').files;
     // var o = document.getElementById('progress');
     // var progress = o.appendChild(document.createElement('p'));
     // progress.appendChild(document.createTextNode('upload ' + file.name));
@@ -98,7 +99,7 @@ jQuery(document).ready(function($) {
                     ]) : 
                     '<p>You do not have any files.</p>';
                 var htmlTemplate = [
-                    '<h2>Uploaded Files</h2>',
+                    '<h2 class="title">Files in your S3 bucket (BUCKET NAME VAR HERE)</h2>',
                     message,
                     '<ul>',
                         getHtml(fileList),
