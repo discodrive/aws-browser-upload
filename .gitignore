@@ -1,0 +1,10 @@
+*.DS_Store
+.travis.yml
+assets/js/__tests__/
+assets/js/sum.js
+bin/
+node_modules/
+npm-debug.log
+phpcs.ruleset.xml
+phpunit.xml.dist
+tests/

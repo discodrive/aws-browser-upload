@@ -69,6 +69,10 @@ jQuery(document).ready(function($) {
         });
     }
 
+    /**
+     * Create a HTML block followed by a new line to output into a template
+     * @author Lee Aplin <lee@substrakt.com>
+     */
     function getHtml(template) {
         return template.join('\n');
     }
@@ -76,15 +80,12 @@ jQuery(document).ready(function($) {
     /**
      * Return a list of all files in the S3 bucket
      * @author Lee Aplin <lee@substrakt.com>
-     * @return null
      */
     window.listFiles = function listFiles() {
         s3.listObjectsV2({Delimiter: '/'}, function(err, data) {
             if (err) {
                 return alert('There was an error listing your files:' + err.message);
-            } else {
-                //document.getElementById('app').innerHTML = data.Contents[0].Key;
-                
+            } else {                
                 var fileList = data.Contents.map(function(obj) {
                     var fileName = obj.Key;
                     return getHtml([
