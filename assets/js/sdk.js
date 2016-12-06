@@ -67,8 +67,14 @@ jQuery(document).ready(function($) {
                 alert('The filesize is too large, please upload a smaller file.');
             }
         }).on('httpUploadProgress', function(evt) {
-            console.log('Progress:', evt.loaded, '/', evt.total); 
-        }).send(function(err, data) { console.log(err, data) });;
+            var progress   = (evt.loaded / evt.total) * 100;
+            var background = parseInt(100 - progress);
+
+            // Display percentage of upload rounded up to next
+            // whole number for readability
+            jQuery('#progress').html('<p style="background-position:'+ background +'% 0;">' + Math.ceil(progress) + '%</p>');
+            console.log(progress);
+        }).send(function(err, data) { console.log(err, data) });
     }
 
     /**
