@@ -42,7 +42,7 @@ jQuery(document).ready(function($) {
      * @author Lee Aplin <lee@substrakt.com>
      * @return null
      */
-    function addFile() {
+    window.addFile = function() {
         var files = document.getElementById('fileupload-files').files;
         if (!files.length) {
             return alert('Please choose a file to upload.');
@@ -66,14 +66,16 @@ jQuery(document).ready(function($) {
             } else {
                 alert('The filesize is too large, please upload a smaller file.');
             }
-        });
+        }).on('httpUploadProgress', function(evt) {
+            console.log('Progress:', evt.loaded, '/', evt.total); 
+        }).send(function(err, data) { console.log(err, data) });;
     }
 
     /**
      * Create a HTML block followed by a new line to output into a template
      * @author Lee Aplin <lee@substrakt.com>
      */
-    function getHtml(template) {
+    window.getHtml = function(template) {
         return template.join('\n');
     }
 
@@ -81,7 +83,7 @@ jQuery(document).ready(function($) {
      * Return a list of all files in the S3 bucket
      * @author Lee Aplin <lee@substrakt.com>
      */
-    window.listFiles = function listFiles() {
+    window.listFiles = function() {
         s3.listObjectsV2({Delimiter: '/'}, function(err, data) {
             if (err) {
                 return alert('There was an error listing your files:' + err.message);
@@ -116,7 +118,7 @@ jQuery(document).ready(function($) {
      * @author Lee Aplin <lee@substrakt.com>
      * @return null
      */
-    window.deleteFile = function deleteFile(fileName) {
+    window.deleteFile = function(fileName) {
         s3.deleteObject({Key: fileName}, function(err, data) {
             if (err) {
                 return alert('There was an error deleting your file:' + err.message);
