@@ -3,7 +3,7 @@
     width:240px;
     padding:5px 10px;
     margin:2px 0;
-    background: #eee url("../images/progress.png") 100% 0 repeat-y;
+    background: #fff url("../images/progress.png") 100% 0 repeat-y;
 }
 
 #progress p.success {
@@ -12,4 +12,26 @@
 
 #progress p.failed {
     background:#c00 none 0 0 no-repeat;
+}
+
+span.trash {
+    color:#a00;
+    cursor:pointer;
+}
+
+span.trash&:hover {
+    color:#D9292A;
+}
+
+#app h2 {
+    margin-bottom:2em;
+}
+
+ul.filelist li {
+    margin-bottom:30px;
+}
+
+ul.filelist li h4 {
+    margin-bottom:1em;
+    font-size:1.2em;
 }

@@ -9,6 +9,7 @@ jQuery(document).ready(function($) {
     var config = new AWS.Config({
       accessKeyId: 'AKIAJPM664AWNNL6VUYA', secretAccessKey: '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', region: bucketRegion
     });
+    
 
     AWS.config.update(config);
 
@@ -16,26 +17,6 @@ jQuery(document).ready(function($) {
       apiVersion: '2006-03-01',
       params: {Bucket: bucketName}
     });
-
-    // // Create a progress bar
-    // var file = document.getElementById('fileupload-files').files;
-    // var o = document.getElementById('progress');
-    // var progress = o.appendChild(document.createElement('p'));
-    // progress.appendChild(document.createTextNode('upload ' + file.name));
-
-    // // Calculate progress
-    // s3.upload.addEventListener('progress', function(e){
-    //     var pc = parseInt(100 - (e.loaded / e.total * 100));
-    //     progress.style.backgroundPosition = pc + '% 0';
-    // }, false);
-
-    // // File received/failed
-    // s3.onreadystatechange = function(e) {
-    //     if (s3.readyState == 4) {
-    //         progress.className = (s3.status == 200 ? "success" : "failure");
-    //     }
-    // };
-
 
     /**
      * Upload a file to S3
@@ -61,6 +42,7 @@ jQuery(document).ready(function($) {
                     return alert('There was an error uploading your file', err.message);
                 }
 
+                ajaxRequest(data);
                 // Success
                 alert('Successfully uploaded file.');
             } else {
@@ -73,7 +55,6 @@ jQuery(document).ready(function($) {
             // Display percentage of upload rounded up to next
             // whole number for readability
             jQuery('#progress').html('<p style="background-position:'+ background +'% 0;">' + Math.ceil(progress) + '%</p>');
-            console.log(progress);
         }).send(function(err, data) { console.log(err, data) });
     }
 
@@ -85,32 +66,43 @@ jQuery(document).ready(function($) {
         return template.join('\n');
     }
 
+    window.encodedFileName = function(name) {
+        return String(name).replace(/ /g, '+').replace(/\&/g, '%26');
+    };
+
     /**
      * Return a list of all files in the S3 bucket
      * @author Lee Aplin <lee@substrakt.com>
      */
     window.listFiles = function() {
         s3.listObjectsV2({Delimiter: '/'}, function(err, data) {
+
+            console.log(data);
+
             if (err) {
                 return alert('There was an error listing your files:' + err.message);
             } else {                
                 var fileList = data.Contents.map(function(obj) {
+
+                    console.log(obj);
+
                     var fileName = obj.Key;
+    
                     return getHtml([
                         '<li>',
-                            fileName + ' <span onclick="deleteFile(\'' + fileName + '\')">X</span>',
+                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + ' | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete</span>',
                         '</li>' 
                     ]);
                 });
                 var message = fileList.length ?
                     getHtml([
-                        '<p>Click on the X to delete the file.</p>'
+                        ''
                     ]) : 
                     '<p>You do not have any files.</p>';
                 var htmlTemplate = [
-                    '<h2 class="title">Files in your S3 bucket (BUCKET NAME VAR HERE)</h2>',
+                    '<h2 class="title">Files in your S3 bucket "' + bucketName +'"</h2>',
                     message,
-                    '<ul>',
+                    '<ul class="filelist">',
                         getHtml(fileList),
                     '</ul>'
                 ]
