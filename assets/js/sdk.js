@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
     
                     return getHtml([
                         '<li>',
-                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + ' | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete</span>',
+                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + ' | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete file</span>',
                         '</li>' 
                     ]);
                 });
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
             if (err) {
                 return alert('There was an error deleting your file:' + err.message);
             }
-            alert('Successfully delete file.');
+            alert('Successfully deleted ' + fileName);
         });
     }
     
