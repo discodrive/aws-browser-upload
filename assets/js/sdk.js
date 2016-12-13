@@ -1,5 +1,8 @@
 jQuery(document).ready(function($) {
 
+    // One click to clipboard
+    var clipboard = new Clipboard('.clipboard_btn');
+
     // REFACTOR SETUP TO USE ENV VARIABLES HERE
     // CREATE AN OPTIONS PAGE. IF OPTIONS SET USE THEM, OTHERWISE REVERT TO CONSTANTS IN WP-CONFIG
 
@@ -66,6 +69,10 @@ jQuery(document).ready(function($) {
         return template.join('\n');
     }
 
+    /**
+     * Encode the filename to match S3s naming conventions
+     * @author Lee Aplin <lee@substrakt.com>
+     */
     window.encodedFileName = function(name) {
         return String(name).replace(/ /g, '+').replace(/\&/g, '%26');
     };
@@ -90,7 +97,7 @@ jQuery(document).ready(function($) {
     
                     return getHtml([
                         '<li>',
-                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + ' | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete file</span>',
+                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> <input id="url" value="https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + '" /> | <span class="clipboard_btn" data-clipboard-target="#url">Copy to clipboard</span> | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete file</span>',
                         '</li>' 
                     ]);
                 });
