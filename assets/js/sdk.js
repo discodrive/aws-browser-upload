@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 
     // One click to clipboard
-    var clipboard = new Clipboard('.clipboard_btn');
+    var clipboard = new Clipboard('.clipboard_btn', this);
 
     // REFACTOR SETUP TO USE ENV VARIABLES HERE
     // CREATE AN OPTIONS PAGE. IF OPTIONS SET USE THEM, OTHERWISE REVERT TO CONSTANTS IN WP-CONFIG
