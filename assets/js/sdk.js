@@ -1,7 +1,8 @@
 jQuery(document).ready(function($) {
 
     // One click to clipboard
-    var clipboard = new Clipboard('.clipboard_btn', this);
+    // Uses clipboard.js library
+    var clipboard = new Clipboard('.clipboard_btn');
 
     // REFACTOR SETUP TO USE ENV VARIABLES HERE
     // CREATE AN OPTIONS PAGE. IF OPTIONS SET USE THEM, OTHERWISE REVERT TO CONSTANTS IN WP-CONFIG
@@ -10,12 +11,15 @@ jQuery(document).ready(function($) {
     var bucketRegion = 'eu-west-1';
 
     var config = new AWS.Config({
-      accessKeyId: 'AKIAJPM664AWNNL6VUYA', secretAccessKey: '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', region: bucketRegion
+      accessKeyId: 'AKIAJPM664AWNNL6VUYA', 
+      secretAccessKey: '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', 
+      region: bucketRegion
     });
     
 
     AWS.config.update(config);
 
+    // Create a new S3 Bucket object
     var s3 = new AWS.S3({
       apiVersion: '2006-03-01',
       params: {Bucket: bucketName}
@@ -28,9 +32,12 @@ jQuery(document).ready(function($) {
      */
     window.addFile = function() {
         var files = document.getElementById('fileupload-files').files;
+
+        // If no file i s selected display a message
         if (!files.length) {
             return alert('Please choose a file to upload.');
         }
+
         var file = files[0];
         var fileName = file.name;
         
@@ -39,6 +46,7 @@ jQuery(document).ready(function($) {
             Body: file,
             ACL: 'public-read'
         }, function(err,data) {
+            // Max file size is set in a hidden field in file-upload.php
             if (s3.upload && file.size <= document.getElementById("MAX_FILE_SIZE").value) {
                 if(err) {
                     // Failure message
@@ -70,7 +78,7 @@ jQuery(document).ready(function($) {
     }
 
     /**
-     * Encode the filename to match S3s naming conventions
+     * Encode the filename to match S3 naming conventions
      * @author Lee Aplin <lee@substrakt.com>
      */
     window.encodedFileName = function(name) {
@@ -96,22 +104,34 @@ jQuery(document).ready(function($) {
                     var fileName = obj.Key;
     
                     return getHtml([
-                        '<li>',
-                            '<h4>' + fileName + '</h4> <strong>File URL:</strong> <input id="url" value="https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + '" /> | <span class="clipboard_btn" data-clipboard-target="#url">Copy to clipboard</span> | <span class="trash" onclick="deleteFile(\'' + fileName + '\')">Delete file</span>',
-                        '</li>' 
+                        '<tr>',
+                            '<td>',
+                                '<h4>' + fileName + '</h4> <strong>File URL:</strong> <input id="url" value="https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + '" /> ' + 
+                                '<span class="clipboard_btn" data-clipboard-target="#url"><i class="fa fa-clipboard" aria-hidden="true" title="Copy to clipboard"></i></span>' +
+                                '<span class="trash" onclick="deleteFile(\'' + fileName + '\')"><i class="fa fa-trash-o" aria-hidden="true" title="Delete file"></i></span>',
+                            '</td>',
+                        '</tr>' 
                     ]);
                 });
                 var message = fileList.length ?
                     getHtml([
-                        ''
+                        '<p>Click on <i class="fa fa-clipboard" aria-hidden="true"></i> to copy the url or <i class="fa fa-trash-o" aria-hidden="true"></i> to delete the file</p>'
                     ]) : 
                     '<p>You do not have any files.</p>';
                 var htmlTemplate = [
-                    '<h2 class="title">Files in your S3 bucket "' + bucketName +'"</h2>',
-                    message,
-                    '<ul class="filelist">',
-                        getHtml(fileList),
-                    '</ul>'
+                    '<table class="wp-list-table widefat fixed striped">',
+                        '<thead>',
+                            '<tr>',
+                                '<td><h2 class="title">Files in your S3 bucket "' + bucketName +'"</h2></td>',
+                            '</tr>',
+                        '</thead>',
+                        '<tbody id="the-list">',
+                            '<tr>',
+                                '<td>' + message + '</td>',
+                            '</tr>',
+                            getHtml(fileList),
+                        '</tbody>',
+                    '</table>'
                 ]
                 document.getElementById('app').innerHTML = getHtml(htmlTemplate);
             }

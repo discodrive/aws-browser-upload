@@ -14,17 +14,34 @@
     background:#c00 none 0 0 no-repeat;
 }
 
+span.trash, span.clipboard_btn {
+    display:inline-block;
+    padding: 9px 10px 8px 10px;
+}
+
 span.trash {
-    color:#a00;
+    color:#ffffff;
     cursor:pointer;
+    background:#a00;
 }
 
 span.trash&:hover {
     color:#D9292A;
 }
 
+span.clipboard_btn {
+    cursor:pointer;
+    background:#555;
+    color:#ffffff;
+}
+
+input#url {
+    padding:8px 5px;
+}
+
 #app h2 {
-    margin-bottom:2em;
+    margin:5px 0;
+    font-size:1.1em;
 }
 
 ul.filelist li {
