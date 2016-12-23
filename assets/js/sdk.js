@@ -5,12 +5,12 @@ jQuery(document).ready(function($) {
     var clipboard = new Clipboard('.clipboard_btn');
 
     // Bucket options
-    var bucketName = ABU_BUCKET_NAME;
-    var bucketRegion = ABU_BUCKET_REGION;
+    var bucketName = abu_options.bucketName;
+    var bucketRegion = abu_options.bucketRegion;
 
     var config = new AWS.Config({
-      accessKeyId: ABU_ACCESS_KEY, 
-      secretAccessKey: ABU_SECRET_ACCESS_KEY, 
+      accessKeyId: abu_options.accessKey, 
+      secretAccessKey: abu_options.secretKey, 
       region: bucketRegion
     });
     
