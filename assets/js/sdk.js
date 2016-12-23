@@ -4,15 +4,13 @@ jQuery(document).ready(function($) {
     // Uses clipboard.js library
     var clipboard = new Clipboard('.clipboard_btn');
 
-    // REFACTOR SETUP TO USE ENV VARIABLES HERE
-    // CREATE AN OPTIONS PAGE. IF OPTIONS SET USE THEM, OTHERWISE REVERT TO CONSTANTS IN WP-CONFIG
-
-    var bucketName = 'royal-court-podcasts';
-    var bucketRegion = 'eu-west-1';
+    // Bucket options
+    var bucketName = ABU_BUCKET_NAME;
+    var bucketRegion = ABU_BUCKET_REGION;
 
     var config = new AWS.Config({
-      accessKeyId: 'AKIAJPM664AWNNL6VUYA', 
-      secretAccessKey: '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', 
+      accessKeyId: ABU_ACCESS_KEY, 
+      secretAccessKey: ABU_SECRET_ACCESS_KEY, 
       region: bucketRegion
     });
     
