@@ -84,6 +84,14 @@ jQuery(document).ready(function($) {
     };
 
     /**
+     * Sanitize the object Tag to create a unique indentifier
+     * @author Lee Aplin <lee@substrakt.com>
+     */
+     window.sanitizeTag = function(tag) {
+        return String(tag).replace(/["']/g, "");
+     }
+
+    /**
      * Return a list of all files in the S3 bucket
      * @author Lee Aplin <lee@substrakt.com>
      */
@@ -100,12 +108,13 @@ jQuery(document).ready(function($) {
                     console.log(obj);
 
                     var fileName = obj.Key;
+                    var tag      = obj.ETag;
     
                     return getHtml([
                         '<tr>',
                             '<td>',
-                                '<h4>' + fileName + '</h4> <strong>File URL:</strong> <input id="url" value="https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + '" /> ' + 
-                                '<span class="clipboard_btn" data-clipboard-target="#url"><i class="fa fa-clipboard" aria-hidden="true" title="Copy to clipboard"></i></span>' +
+                                '<h4>' + fileName + '</h4> <strong>File URL:</strong> <input id="file-' + sanitizeTag(tag) + '" value="https://s3-' + bucketRegion + '.amazonaws.com/' + bucketName + '/' + encodedFileName(fileName) + '" /> ' + 
+                                '<span class="clipboard_btn" data-clipboard-target="#file-' + sanitizeTag(tag) + '"><i class="fa fa-clipboard" aria-hidden="true" title="Copy to clipboard"></i></span>' +
                                 '<span class="trash" onclick="deleteFile(\'' + fileName + '\')"><i class="fa fa-trash-o" aria-hidden="true" title="Delete file"></i></span>',
                             '</td>',
                         '</tr>' 
