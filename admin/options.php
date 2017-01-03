@@ -1,11 +1,6 @@
 <?php 
 // Setup Options page for AWS
 
-// royal-court-podcasts
-// eu-west-1
-// AKIAJPM664AWNNL6VUYA
-// Ih2iHd5/4+qeCanTAe3gylOe7Ok/ccwkmiguPTkK
-
 // If user doesn't have permissions to edit options deny them access
 if (! current_user_can('manage_options'))
 {
